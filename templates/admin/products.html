@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Manage fertilizers | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <div class="admin-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <h1 class="section-title">{% if edit_product %}Update fertilizer{% else %}Add a fertilizer{% endif %}</h1>
+      <form class="panel mb-4" method="post" enctype="multipart/form-data" action="{% if edit_product %}{{ url_for('admin_edit_product', fertilizer_id=edit_product.fertilizer_id) }}{% else %}{{ url_for('admin_products') }}{% endif %}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-control" id="name" name="name" required maxlength="80" value="{{ form.get('name', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="category">Category</label>
+            <input class="form-control" id="category" name="category" list="category-list" required maxlength="40" value="{{ form.get('category', '') }}">
+            <datalist id="category-list">
+              {% for cat in categories %}<option value="{{ cat }}"></option>{% endfor %}
+            </datalist>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="price">Price (INR per pack)</label>
+            <input class="form-control" id="price" name="price" type="number" min="0.01" step="0.01" required value="{{ form.get('price', '') }}">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="stock">Stock</label>
+            <input class="form-control" id="stock" name="stock" type="number" min="0" step="1" required value="{{ form.get('stock', '') }}">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="image">Image</label>
+            <input class="form-control" id="image" name="image" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required maxlength="2000">{{ form.get('description', '') }}</textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="usage">Usage information</label>
+            <textarea class="form-control" id="usage" name="usage" rows="3" required maxlength="2000">{{ form.get('usage', '') }}</textarea>
+          </div>
+        </div>
+        <div class="mt-3 d-flex gap-2">
+          <button class="btn btn-success" type="submit">{% if edit_product %}Save changes{% else %}Add fertilizer{% endif %}</button>
+          {% if edit_product %}<a class="btn btn-outline-success" href="{{ url_for('admin_products') }}">Cancel</a>{% endif %}
+        </div>
+      </form>
+
+      <div class="panel">
+        <h2 class="h5">Catalog</h2>
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr><th>Fertilizer</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr>
+            </thead>
+            <tbody>
+              {% for item in products %}
+                <tr>
+                  <td>
+                    <strong>{{ item.name }}</strong>
+                    <div class="small muted">{{ item.description[:80] }}{% if item.description|length > 80 %}...{% endif %}</div>
+                  </td>
+                  <td>{{ item.category }}</td>
+                  <td>{{ item.price|inr }}</td>
+                  <td>
+                    <form method="post" action="{{ url_for('admin_update_stock', fertilizer_id=item.fertilizer_id) }}" class="d-flex gap-2">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      <input class="form-control form-control-sm" style="width:5.5rem" type="number" name="stock" min="0" value="{{ item.stock }}" required>
+                      <button class="btn btn-outline-success btn-sm" type="submit">Save stock</button>
+                    </form>
+                  </td>
+                  <td class="text-nowrap">
+                    <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_edit_product', fertilizer_id=item.fertilizer_id) }}">Edit</a>
+                    <form class="d-inline js-confirm" method="post" action="{{ url_for('admin_delete_product', fertilizer_id=item.fertilizer_id) }}" data-confirm="Delete {{ item.name }}?">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

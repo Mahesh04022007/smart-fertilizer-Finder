@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Contact | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <h1 class="section-title">Contact</h1>
+      <p class="section-copy">Send a question about a fertilizer, an order, or a shop listing. Messages are stored for the administrator.</p>
+      {% if errors %}
+        <div class="alert alert-danger">
+          <ul class="mb-0">{% for message in errors.values() %}<li>{{ message }}</li>{% endfor %}</ul>
+        </div>
+      {% endif %}
+      <form method="post" action="{{ url_for('contact') }}" class="panel js-validate" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+          <label class="form-label" for="name">Name</label>
+          <input class="form-control {% if errors.name %}is-invalid{% endif %}" id="name" name="name" required maxlength="80" value="{{ form.get('name', '') }}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-control {% if errors.email %}is-invalid{% endif %}" id="email" name="email" type="email" required maxlength="120" value="{{ form.get('email', '') }}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="message">Message</label>
+          <textarea class="form-control {% if errors.message %}is-invalid{% endif %}" id="message" name="message" rows="5" required maxlength="2000">{{ form.get('message', '') }}</textarea>
+        </div>
+        <button class="btn btn-success" type="submit">Submit</button>
+      </form>
+    </div>
+    <div class="col-lg-5">
+      <aside class="contact-aside">
+        <h2 class="h4">Help desk</h2>
+        <p>Sample Campus, Agri Market Road</p>
+        <p>Helpline: 1800-000-1234</p>
+        <p>Email: support@smartfertilizer.example</p>
+        <p class="mb-0">For shop stock, call the number on the shop card. For account help, include the email you used to register.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,24 @@
+<article class="shop-card">
+  <img src="{{ 'shop.jpg'|media }}" alt="Storefront for {{ shop.shop_name }}">
+  <div class="p-3">
+    <h3 class="h5 mb-1">{{ shop.shop_name }}</h3>
+    <p class="mb-2">Owner: {{ shop.owner_name }}</p>
+    <div class="shop-meta small">
+      <div><i class="bi bi-geo-alt"></i> {{ shop.village }}</div>
+      <div>{{ shop.address }}</div>
+      <div><i class="bi bi-telephone"></i> {{ shop.mobile }}</div>
+    </div>
+    <p class="mt-3 mb-2 fw-bold">Available fertilizers</p>
+    <div class="chip-row mb-3">
+      {% for name in shop.fertilizers %}
+        <span class="chip">{{ name }}</span>
+      {% else %}
+        <span class="muted">Stock list coming soon.</span>
+      {% endfor %}
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-success btn-sm" href="tel:+91{{ shop.mobile }}">Call shop</a>
+      <a class="btn btn-outline-success btn-sm" href="{{ url_for('shops', q=shop.village) }}">Shops in {{ shop.village }}</a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Customer orders | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <div class="admin-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <h1 class="section-title">Customer orders</h1>
+      {% if orders %}
+        {% for order in orders %}
+          <article class="order-card">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+              <h2 class="h5 mb-0">Order #{{ order.order_id }}</h2>
+              <span class="status status-{{ order.order_status|lower|replace(' ', '-') }}">{{ order.order_status }}</span>
+            </div>
+            <p class="mb-1">{{ order.customer_name }} · {{ order.email }} · {{ order.mobile }}</p>
+            <p class="muted">{{ order.order_date }} · {{ order.total_amount|inr }}</p>
+            <ul>
+              {% for item in order['items'] %}
+                <li>{{ item.name }} × {{ item.quantity }} at {{ item.price|inr }}</li>
+              {% endfor %}
+            </ul>
+            <form method="post" action="{{ url_for('admin_order_status', order_id=order.order_id) }}" class="d-flex flex-wrap gap-2">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <label class="visually-hidden" for="status-{{ order.order_id }}">Status for order {{ order.order_id }}</label>
+              <select class="form-select" style="max-width:16rem" id="status-{{ order.order_id }}" name="order_status">
+                {% for status in statuses %}
+                  <option value="{{ status }}" {% if status == order.order_status %}selected{% endif %}>{{ status }}</option>
+                {% endfor %}
+              </select>
+              <button class="btn btn-success" type="submit">Update status</button>
+            </form>
+          </article>
+        {% endfor %}
+      {% else %}
+        <div class="panel">No orders have been placed yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Manage shops | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <div class="admin-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <h1 class="section-title">{% if edit_shop %}Update shop{% else %}Add a shop{% endif %}</h1>
+      <form class="panel mb-4" method="post" action="{% if edit_shop %}{{ url_for('admin_edit_shop', shop_id=edit_shop.shop_id) }}{% else %}{{ url_for('admin_shops') }}{% endif %}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="shop_name">Shop name</label>
+            <input class="form-control" id="shop_name" name="shop_name" required maxlength="80" value="{{ form.get('shop_name', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="owner_name">Owner name</label>
+            <input class="form-control" id="owner_name" name="owner_name" required maxlength="80" value="{{ form.get('owner_name', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="village">Village</label>
+            <input class="form-control" id="village" name="village" required maxlength="80" value="{{ form.get('village', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="mobile">Mobile</label>
+            <input class="form-control" id="mobile" name="mobile" required pattern="[0-9]{10}" maxlength="10" value="{{ form.get('mobile', '') }}">
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="address">Address</label>
+            <input class="form-control" id="address" name="address" required maxlength="160" value="{{ form.get('address', '') }}">
+          </div>
+          <div class="col-12">
+            <p class="fw-bold mb-2">Available fertilizers</p>
+            <div class="row">
+              {% for fert in fertilizers %}
+                <div class="col-sm-6 col-lg-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="fertilizer_ids" value="{{ fert.fertilizer_id }}" id="fert-{{ fert.fertilizer_id }}" {% if fert.fertilizer_id in selected_ids %}checked{% endif %}>
+                    <label class="form-check-label" for="fert-{{ fert.fertilizer_id }}">{{ fert.name }}</label>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 d-flex gap-2">
+          <button class="btn btn-success" type="submit">{% if edit_shop %}Save shop{% else %}Add shop{% endif %}</button>
+          {% if edit_shop %}<a class="btn btn-outline-success" href="{{ url_for('admin_shops') }}">Cancel</a>{% endif %}
+        </div>
+      </form>
+
+      <div class="panel">
+        <h2 class="h5">Shops</h2>
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Shop</th><th>Location</th><th>Fertilizers</th><th></th></tr></thead>
+            <tbody>
+              {% for shop in shops %}
+                <tr>
+                  <td>
+                    <strong>{{ shop.shop_name }}</strong>
+                    <div class="small muted">{{ shop.owner_name }} · {{ shop.mobile }}</div>
+                  </td>
+                  <td>{{ shop.village }}<div class="small muted">{{ shop.address }}</div></td>
+                  <td>{{ shop.fertilizers|join(', ') }}</td>
+                  <td class="text-nowrap">
+                    <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_edit_shop', shop_id=shop.shop_id) }}">Edit</a>
+                    <form class="d-inline js-confirm" method="post" action="{{ url_for('admin_delete_shop', shop_id=shop.shop_id) }}" data-confirm="Delete {{ shop.shop_name }}?">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

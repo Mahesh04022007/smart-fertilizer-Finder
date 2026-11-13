@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Admin login | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card">
+    <h1 class="h3">Admin login</h1>
+    <p class="muted">This area is for managing fertilizers, shops, stock, and orders.</p>
+    <div class="demo-note mb-3">
+      Username: <strong>admin</strong><br>
+      Password: <strong>Admin@123</strong>
+    </div>
+    <form method="post" action="{{ url_for('admin_login') }}" class="js-validate">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="next" value="{{ next_url }}">
+      <div class="mb-3">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control" id="username" name="username" required maxlength="40" value="{{ form.get('username', '') }}" autocomplete="username">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-control" id="password" name="password" type="password" required autocomplete="current-password">
+      </div>
+      <button class="btn btn-success w-100" type="submit">Login</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

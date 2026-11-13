@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Admin dashboard | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <div class="admin-shell">
+    {% include "admin/_sidebar.html" %}
+    <div>
+      <h1 class="section-title">Dashboard</h1>
+      <p class="muted">Signed in as {{ session.admin_name }}.</p>
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3"><div class="stat-card"><strong>{{ stats.farmers }}</strong><span>Registered farmers</span></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card"><strong>{{ stats.fertilizers }}</strong><span>Fertilizers</span></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card"><strong>{{ stats.shops }}</strong><span>Shops</span></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card"><strong>{{ stats.orders }}</strong><span>Orders</span></div></div>
+      </div>
+
+      <div class="panel mb-4">
+        <h2 class="h5">Low stock</h2>
+        {% if low_stock %}
+          <ul class="mb-0">
+            {% for item in low_stock %}
+              <li class="low-stock mb-1 px-2 py-1">{{ item.name }} — {{ item.stock }} left. <a href="{{ url_for('admin_edit_product', fertilizer_id=item.fertilizer_id) }}">Update</a></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="mb-0">No fertilizer is below 15 units.</p>
+        {% endif %}
+      </div>
+
+      <div class="panel mb-4">
+        <div class="d-flex justify-content-between">
+          <h2 class="h5">Recent orders</h2>
+          <a href="{{ url_for('admin_orders') }}">All orders</a>
+        </div>
+        {% if recent_orders %}
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <thead><tr><th>Order</th><th>Farmer</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody>
+                {% for order in recent_orders %}
+                  <tr>
+                    <td>#{{ order.order_id }}<div class="small muted">{{ order.order_date }}</div></td>
+                    <td>{{ order.customer_name }}<div class="small muted">{{ order.mobile }}</div></td>
+                    <td>{{ order.total_amount|inr }}</td>
+                    <td>{{ order.order_status }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="mb-0">No orders yet.</p>
+        {% endif %}
+      </div>
+
+      <div class="panel mb-4">
+        <h2 class="h5">Registered farmers</h2>
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Orders</th></tr></thead>
+            <tbody>
+              {% for farmer in customers %}
+                <tr>
+                  <td>{{ farmer.name }}</td>
+                  <td>{{ farmer.email }}</td>
+                  <td>{{ farmer.mobile }}</td>
+                  <td>{{ farmer.order_count }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="h5">Contact messages</h2>
+        {% if messages %}
+          {% for note in messages %}
+            <article class="border-bottom py-2">
+              <strong>{{ note.name }}</strong> · {{ note.email }}
+              <div class="small muted">{{ note.submitted_at }}</div>
+              <p class="mb-0" style="white-space:pre-wrap;">{{ note.message }}</p>
+            </article>
+          {% endfor %}
+        {% else %}
+          <p class="mb-0">No messages yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

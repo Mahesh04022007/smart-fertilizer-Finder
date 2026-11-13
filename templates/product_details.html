@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <p class="mb-3"><a href="{{ url_for('products') }}">&larr; Back to products</a></p>
+  <div class="detail-grid">
+    <img class="product-photo rounded-4" src="{{ product.image|media }}" alt="{{ product.name }}">
+    <div class="panel">
+      <span class="badge category-badge">{{ product.category }}</span>
+      <h1 class="mt-2">{{ product.name }}</h1>
+      <p class="price">{{ product.price|inr }} <small class="muted fw-normal">per pack</small></p>
+      {% if product.stock > 0 %}
+        <p class="stock-ok">Available stock: {{ product.stock }}</p>
+      {% else %}
+        <p class="stock-out">Available stock: 0 — currently unavailable</p>
+      {% endif %}
+      <h2 class="h5 mt-4">Description</h2>
+      <p class="product-copy">{{ product.description }}</p>
+      <div class="usage-box">
+        <h2 class="h5">Usage information</h2>
+        <p class="mb-0 product-copy">{{ product.usage }}</p>
+      </div>
+      {% if product.stock > 0 %}
+        <form class="mt-4" method="post" action="{{ url_for('add_to_cart', fertilizer_id=product.fertilizer_id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <label class="form-label" for="quantity">Quantity</label>
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <div class="qty-box">
+              <button class="qty-minus" type="button" aria-label="Decrease quantity">−</button>
+              <input id="quantity" type="number" name="quantity" value="1" min="1" max="{{ [product.stock, 500]|min }}" required>
+              <button class="qty-plus" type="button" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="btn btn-success" type="submit">Add to cart</button>
+          </div>
+        </form>
+      {% else %}
+        <button class="btn btn-secondary mt-4" type="button" disabled>Out of stock</button>
+      {% endif %}
+    </div>
+  </div>
+  {% if related %}
+    <h2 class="section-title mt-5">Related fertilizers</h2>
+    <div class="row g-4 mt-1">
+      {% for product in related %}
+        <div class="col-sm-6 col-lg-4">{% include "partials/product_card.html" %}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

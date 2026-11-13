@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="text-uppercase fw-bold mb-2" style="letter-spacing:.12em;color:#f6d365;">Online fertilizer availability</p>
+    <h1>Find the right fertilizer, nearby and in stock.</h1>
+    <p class="lead mt-3">Check prices, see what local shops carry, and place an order without travelling from shop to shop.</p>
+    <form class="hero-search mt-4" action="{{ url_for('products') }}" method="get" role="search">
+      <label class="visually-hidden" for="home-search">Search fertilizer</label>
+      <input id="home-search" type="search" name="q" placeholder="Search urea, DAP, potash, neem cake...">
+      <button class="btn btn-gold px-4" type="submit">Search</button>
+    </form>
+    <div class="hero-actions">
+      <a class="btn btn-gold" href="{{ url_for('products') }}">Browse fertilizers</a>
+      <a class="btn btn-outline-light" href="{{ url_for('shops') }}">Find nearby shops</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="stat-strip">
+    <div class="stat-card"><strong>{{ stats.fertilizers }}</strong><span>Fertilizers listed</span></div>
+    <div class="stat-card"><strong>{{ stats.shops }}</strong><span>Partner shops</span></div>
+    <div class="stat-card"><strong>{{ stats.farmers }}</strong><span>Registered farmers</span></div>
+    <div class="stat-card"><strong>{{ stats.orders }}</strong><span>Orders placed</span></div>
+  </div>
+</div>
+
+<section class="container py-5">
+  <h2 class="section-title">Popular fertilizers</h2>
+  <p class="section-copy">Prices and stock come from the catalog. Open a product to read how to use it and add it to your cart.</p>
+  <div class="chip-row mb-4">
+    {% for cat in categories %}
+      <a class="chip" href="{{ url_for('products', category=cat) }}">{{ cat }}</a>
+    {% endfor %}
+  </div>
+  <div class="row g-4">
+    {% for product in popular %}
+      <div class="col-sm-6 col-lg-3">
+        {% include "partials/product_card.html" %}
+      </div>
+    {% else %}
+      <p>No fertilizers are listed yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container pb-5">
+  <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+    <h2 class="section-title mb-0">Featured fertilizer shops</h2>
+    <a href="{{ url_for('shops') }}">View all shops</a>
+  </div>
+  <div class="row g-4">
+    {% for shop in shops %}
+      <div class="col-md-4">{% include "partials/shop_card.html" %}</div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container pb-5">
+  <h2 class="section-title">How this helps on the farm</h2>
+  <div class="row g-3 mt-1">
+    <div class="col-md-6 col-lg-3">
+      <article class="ag-card benefit">
+        <i class="bi bi-cash-coin"></i>
+        <h3 class="h5 mt-3">Clear prices</h3>
+        <p class="muted mb-0">See the pack price before you leave home, and sort the catalog from low to high.</p>
+      </article>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <article class="ag-card benefit">
+        <i class="bi bi-geo-alt"></i>
+        <h3 class="h5 mt-3">Nearby shops</h3>
+        <p class="muted mb-0">Search by village or town and call the shop that stocks the fertilizer you need.</p>
+      </article>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <article class="ag-card benefit">
+        <i class="bi bi-box-seam"></i>
+        <h3 class="h5 mt-3">Live stock</h3>
+        <p class="muted mb-0">Availability is stored in the database and reduced only when an order is placed.</p>
+      </article>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <article class="ag-card benefit">
+        <i class="bi bi-phone"></i>
+        <h3 class="h5 mt-3">Order online</h3>
+        <p class="muted mb-0">Register once, keep a cart, and review every order from your account.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

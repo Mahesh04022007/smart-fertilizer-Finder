@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Something went wrong | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <div class="panel">
+    <h1 class="section-title">Something went wrong</h1>
+    <p>The page could not be loaded. Please try again.</p>
+    <a class="btn btn-success" href="{{ url_for('home') }}">Back to home</a>
+  </div>
+</section>
+{% endblock %}

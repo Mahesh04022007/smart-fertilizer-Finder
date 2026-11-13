@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#f3f8ef"/>
+  <circle cx="540" cy="78" r="42" fill="#f6d365"/>
+  <path d="M0 390c90-30 140-110 230-100s120 80 220 60 140-50 190-24v154H0z" fill="#d7ebc8"/>
+  <path d="M48 430c40-70 20-120 8-150" fill="none" stroke="#7cb342" stroke-width="6" stroke-linecap="round"/>
+  <path d="M78 420c18-60 8-100-8-140" fill="none" stroke="#2e7d32" stroke-width="6" stroke-linecap="round"/>
+  <rect x="205" y="78" width="230" height="320" rx="22" fill="#1565c0"/>
+  <path d="M205 132h230v34c-46 20-78 16-115-2s-74-14-115 2z" fill="#0d47a1"/>
+  <rect x="248" y="196" width="144" height="86" rx="10" fill="#fff8e1"/>
+  <text x="320" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#14532d">DAP</text>
+  <text x="320" y="330" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" letter-spacing="2" fill="#f7f3df">FERTILIZER</text>
+</svg>

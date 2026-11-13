@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}About Us | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <div class="row g-4 align-items-center">
+    <div class="col-lg-6 about-hero">
+      <img src="{{ 'about.jpg'|media }}" alt="A farmer standing in a green field">
+    </div>
+    <div class="col-lg-6">
+      <h1 class="section-title">About Smart Fertilizer Finder</h1>
+      <p>Smart Fertilizer Finder is an online fertilizer availability and purchasing system. It gives farmers one place to see what a fertilizer costs, whether it is in stock, and which nearby shop carries it.</p>
+      <p>Buying fertilizer often means asking several shops, guessing at the pack price, and travelling when a product is already finished. This website keeps the catalog, shop list, and orders in one database so the information stays consistent.</p>
+    </div>
+  </div>
+  <div class="row g-4 mt-2">
+    <div class="col-md-4">
+      <article class="panel h-100">
+        <h2 class="h5">Find the product</h2>
+        <p class="mb-0">Search urea, DAP, NPK, potash, organic fertilizers, super phosphate, micronutrients, and neem cake. Open a product for the description, price, usage notes, and stock.</p>
+      </article>
+    </div>
+    <div class="col-md-4">
+      <article class="panel h-100">
+        <h2 class="h5">Check a local shop</h2>
+        <p class="mb-0">Shops are listed with the owner, village, address, phone number, and the fertilizers they keep. Search by village or town before you make the trip.</p>
+      </article>
+    </div>
+    <div class="col-md-4">
+      <article class="panel h-100">
+        <h2 class="h5">Purchase with an account</h2>
+        <p class="mb-0">After registration, a farmer can add products to a cart, change quantities, and place an order. The order is saved and the stock count is reduced only if enough units are available.</p>
+      </article>
+    </div>
+  </div>
+  <p class="mt-4 muted">This demonstration currently lists {{ stats.fertilizers }} fertilizers and {{ stats.shops }} sample shops. An administrator can add products, update stock, manage shops, and change order status.</p>
+</section>
+{% endblock %}

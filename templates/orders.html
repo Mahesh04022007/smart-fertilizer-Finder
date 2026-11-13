@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Orders | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <h1 class="section-title">Your orders</h1>
+  {% if placed_order %}
+    <div class="alert alert-success">
+      <h2 class="h4">Order confirmed</h2>
+      <p class="mb-1">Order #{{ placed_order.order_id }} has been saved. Total {{ placed_order.total_amount|inr }}.</p>
+      <p class="mb-0">Status: {{ placed_order.order_status }}. A shop can update this as the order moves forward.</p>
+    </div>
+  {% endif %}
+  {% if orders %}
+    {% for order in orders %}
+      <article class="order-card {% if placed_order and placed_order.order_id == order.order_id %}order-highlight{% endif %}">
+        <div class="d-flex justify-content-between flex-wrap gap-2">
+          <h2 class="h5 mb-0">Order #{{ order.order_id }}</h2>
+          <span class="status status-{{ order.order_status|lower|replace(' ', '-') }}">{{ order.order_status }}</span>
+        </div>
+        <p class="muted mb-2">{{ order.order_date }} · {{ order.total_amount|inr }}</p>
+        <ul class="mb-0">
+          {% for item in order['items'] %}
+            <li>{{ item.name }} × {{ item.quantity }} — {{ item.price|inr }} each</li>
+          {% endfor %}
+        </ul>
+      </article>
+    {% endfor %}
+  {% else %}
+    <div class="panel">
+      <p>You have not placed an order yet.</p>
+      <a class="btn btn-success" href="{{ url_for('products') }}">Shop fertilizers</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

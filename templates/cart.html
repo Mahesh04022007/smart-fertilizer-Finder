@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Cart | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <h1 class="section-title">Shopping cart</h1>
+  {% if items %}
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="table-responsive panel">
+          <table class="table cart-table mb-0">
+            <thead>
+              <tr>
+                <th>Fertilizer</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+                <tr>
+                  <td>
+                    <a href="{{ url_for('product_details', fertilizer_id=item.fertilizer_id) }}">{{ item.name }}</a>
+                    <div class="small muted">{{ item.category }} · {{ item.stock }} in stock</div>
+                  </td>
+                  <td>{{ item.price|inr }}</td>
+                  <td>
+                    <form method="post" action="{{ url_for('update_cart', cart_id=item.cart_id) }}" class="d-flex gap-2 align-items-center">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      <div class="qty-box">
+                        <button class="qty-minus" type="button" aria-label="Decrease quantity">−</button>
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ [item.stock, 500]|min }}" required>
+                        <button class="qty-plus" type="button" aria-label="Increase quantity">+</button>
+                      </div>
+                      <button class="btn btn-outline-success btn-sm" type="submit">Update</button>
+                    </form>
+                  </td>
+                  <td>{{ item.line_total|inr }}</td>
+                  <td>
+                    <form method="post" action="{{ url_for('remove_from_cart', cart_id=item.cart_id) }}">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      <button class="btn btn-outline-danger btn-sm" type="submit">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <aside class="summary-card ag-card">
+          <h2 class="h4">Order summary</h2>
+          <p class="d-flex justify-content-between"><span>Items</span><strong>{{ items|length }}</strong></p>
+          <p class="d-flex justify-content-between"><span>Total</span><strong>{{ total|inr }}</strong></p>
+          <form method="post" action="{{ url_for('checkout') }}" class="js-validate">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-success w-100" type="submit">Place order</button>
+          </form>
+          <a class="btn btn-link w-100" href="{{ url_for('products') }}">Continue shopping</a>
+        </aside>
+      </div>
+    </div>
+  {% else %}
+    <div class="panel">
+      <p>Your cart is empty.</p>
+      <a class="btn btn-success" href="{{ url_for('products') }}">Browse fertilizers</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

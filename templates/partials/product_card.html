@@ -1,0 +1,23 @@
+<article class="ag-card">
+  <a href="{{ url_for('product_details', fertilizer_id=product.fertilizer_id) }}">
+    <img class="product-photo" src="{{ product.image|media }}" alt="{{ product.name }}">
+  </a>
+  <div class="card-body d-flex flex-column">
+    <span class="badge category-badge align-self-start mb-2">{{ product.category }}</span>
+    <h3 class="h5"><a class="text-decoration-none text-dark" href="{{ url_for('product_details', fertilizer_id=product.fertilizer_id) }}">{{ product.name }}</a></h3>
+    <p class="price mb-1">{{ product.price|inr }} <small class="muted fw-normal">/ pack</small></p>
+    {% if product.stock > 0 %}
+      <p class="stock-ok small">In stock ({{ product.stock }})</p>
+    {% else %}
+      <p class="stock-out small">Out of stock</p>
+    {% endif %}
+    <div class="d-flex flex-wrap gap-2 mt-auto">
+      <a class="btn btn-outline-success btn-sm" href="{{ url_for('product_details', fertilizer_id=product.fertilizer_id) }}">View details</a>
+      <form method="post" action="{{ url_for('add_to_cart', fertilizer_id=product.fertilizer_id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="btn btn-success btn-sm" type="submit" {% if product.stock < 1 %}disabled{% endif %}>Add to cart</button>
+      </form>
+    </div>
+  </div>
+</article>

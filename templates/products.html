@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Products | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <h1 class="section-title">Fertilizers</h1>
+  <p class="section-copy">Search by name, filter by category, and sort by price. Every product below is loaded from the database.</p>
+  <form class="filter-bar ag-card" method="get" action="{{ url_for('products') }}">
+    <div>
+      <label class="form-label" for="q">Search</label>
+      <input class="form-control" id="q" type="search" name="q" value="{{ q }}" placeholder="Urea, organic, potash...">
+    </div>
+    <div>
+      <label class="form-label" for="category">Category</label>
+      <select class="form-select auto-submit" id="category" name="category">
+        <option value="">All categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat }}" {% if cat == category %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="form-label" for="sort">Sort by price</label>
+      <select class="form-select auto-submit" id="sort" name="sort">
+        <option value="name" {% if sort == 'name' %}selected{% endif %}>Name (A–Z)</option>
+        <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: low to high</option>
+        <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: high to low</option>
+      </select>
+    </div>
+    <div class="d-flex align-items-end gap-2">
+      <button class="btn btn-success" type="submit">Apply</button>
+      {% if q or category or sort != 'name' %}
+        <a class="btn btn-outline-success" href="{{ url_for('products') }}">Clear</a>
+      {% endif %}
+    </div>
+  </form>
+  <p class="muted">{{ products|length }} fertilizer{{ '' if products|length == 1 else 's' }} found.</p>
+  <div class="row g-4">
+    {% for product in products %}
+      <div class="col-sm-6 col-lg-3">{% include "partials/product_card.html" %}</div>
+    {% else %}
+      <div class="col-12"><div class="panel">No fertilizers matched your search. Try another name or category.</div></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

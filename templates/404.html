@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Page not found | Smart Fertilizer Finder{% endblock %}
+{% block content %}
+<section class="container pb-5">
+  <div class="panel">
+    <h1 class="section-title">Page not found</h1>
+    <p>That page is not part of Smart Fertilizer Finder.</p>
+    <a class="btn btn-success" href="{{ url_for('home') }}">Back to home</a>
+  </div>
+</section>
+{% endblock %}
